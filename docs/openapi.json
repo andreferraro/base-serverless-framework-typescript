@@ -2,12 +2,34 @@
   "openapi": "3.0.3",
   "components": {
     "schemas": {
-      "ResponseModel": {
+      "ResponseHelloModel": {
         "type": "object",
         "properties": {
           "message": {
             "type": "string",
             "example": "Hello John Doe, welcome to the exciting Serverless world. Your random number: 42!"
+          }
+        }
+      },
+      "PostByeRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Wayne"
+          }
+        }
+      },
+      "ResponseByeModel": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Bye John Wayne. Your random number: 1323!"
+          },
+          "randomNumber": {
+            "type": "number",
+            "example": 1323
           }
         }
       },
@@ -46,7 +68,40 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseModel"
+                  "$ref": "#/components/schemas/ResponseHelloModel"
+                }
+              }
+            },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/bye": {
+      "post": {
+        "summary": "Generate a random numer for a user",
+        "description": "Generate a random number for a user",
+        "operationId": "api-serverless-dev-bye",
+        "parameters": [],
+        "tags": [],
+        "requestBody": {
+          "description": "A user information object",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostByeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A random number was generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseByeModel"
                 }
               }
             },

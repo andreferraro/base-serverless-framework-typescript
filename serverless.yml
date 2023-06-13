@@ -47,7 +47,26 @@ functions:
                 responseBody:
                   description: A greeting message was generated successfully 
                 responseModels:
-                  "application/json": "ResponseModel"
+                  "application/json": "ResponseHelloModel"
+  bye:
+    handler: src/functions/bye/handler.bye
+    events:
+      - http:
+          path: bye
+          method: post
+          documentation:
+            summary: "Generate a random numer for a user"
+            description: "Generate a random number for a user"
+            requestBody:
+              description: "A user information object"
+            requestModels:
+              application/json: "PostByeRequest"
+            methodResponses:
+              - statusCode: "200"
+                responseBody:
+                  description: A random number was generated successfully 
+                responseModels:
+                  "application/json": "ResponseByeModel"
 
 package:
   individually: true
@@ -67,7 +86,7 @@ custom:
     title: 'Sample API'
     description: 'Sample API description'
     models:
-      - name: "ResponseModel"
+      - name: "ResponseHelloModel"
         description: "Model for the Hello response"
         contentType: "application/json"
         schema:
@@ -76,3 +95,24 @@ custom:
             message:
               type: "string"
               example: "Hello John Doe, welcome to the exciting Serverless world. Your random number: 42!"
+      - name: "PostByeRequest"
+        description: "Model for the POST Bye request"
+        contentType: "application/json"
+        schema:
+          type: object
+          properties:
+            name:
+              type: "string"
+              example: "John Wayne"
+      - name: "ResponseByeModel"
+        description: "Model for the Bye response"
+        contentType: "application/json"
+        schema:
+          type: "object"
+          properties:
+            message:
+              type: "string"
+              example: "Bye John Wayne. Your random number: 1323!"
+            randomNumber:
+              type: "number"
+              example: 1323
