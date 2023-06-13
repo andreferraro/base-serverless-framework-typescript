@@ -1,0 +1,78 @@
+service: api-serverless
+frameworkVersion: "3"
+provider:
+  name: aws
+  runtime: nodejs18.x
+  timeout: 30
+  region: ${env:AWS_DEFAULT_REGION, "sa-east-1"}
+  apiGateway:
+    minimumCompressionSize: 1024
+    shouldStartNameWithService: true
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1"
+    NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000"
+    NODE_ENV: ${env:NODE_ENV, 'dev'}
+  logs:
+    restApi:
+      accessLogging: true
+      executionLogging: true
+      level: "INFO"
+      fullExecutionData: false
+  tracing:
+    apiGateway: true
+    lambda: true
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+  - serverless-openapi-documenter
+functions:
+  hello:
+    handler: src/functions/hello/handler.hello
+    events:
+      - http:
+          path: hello
+          method: get
+          documentation:
+            summary: "Greeting user with a random number"
+            description: "Generate a random number and greet the user"
+            queryParams:
+              - name: "name"
+                required: false
+                description: "Name to be greet"
+                schema:
+                  type: "string"
+                  example: "John Doe"
+            methodResponses:
+              - statusCode: "200"
+                responseBody:
+                  description: A greeting message was generated successfully 
+                responseModels:
+                  "application/json": "ResponseModel"
+
+package:
+  individually: true
+custom:
+  esbuild:
+    bundle: true
+    minify: true
+    sourcemap: true
+    exclude: ["aws-sdk"]
+    target: "node18"
+    define:
+      "require.resolve": undefined
+    platform: "node"
+    concurrency: 10
+  documentation:
+    version: '1'
+    title: 'Sample API'
+    description: 'Sample API description'
+    models:
+      - name: "ResponseModel"
+        description: "Model for the Hello response"
+        contentType: "application/json"
+        schema:
+          type: "object"
+          properties:
+            message:
+              type: "string"
+              example: "Hello John Doe, welcome to the exciting Serverless world. Your random number: 42!"

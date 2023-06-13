@@ -1,0 +1,59 @@
+{
+  "openapi": "3.0.3",
+  "components": {
+    "schemas": {
+      "ResponseModel": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Hello John Doe, welcome to the exciting Serverless world. Your random number: 42!"
+          }
+        }
+      },
+      "name": {
+        "type": "string",
+        "example": "John Doe"
+      }
+    }
+  },
+  "info": {
+    "title": "Sample API",
+    "description": "Sample API description",
+    "version": "1"
+  },
+  "paths": {
+    "/hello": {
+      "get": {
+        "summary": "Greeting user with a random number",
+        "description": "Generate a random number and greet the user",
+        "operationId": "api-serverless-dev-hello",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Name to be greet",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/name"
+            }
+          }
+        ],
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "A greeting message was generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseModel"
+                }
+              }
+            },
+            "headers": {}
+          }
+        }
+      }
+    }
+  }
+}
