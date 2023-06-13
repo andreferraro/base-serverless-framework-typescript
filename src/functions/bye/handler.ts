@@ -8,13 +8,11 @@ import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 export const main: ValidatedEventAPIGatewayProxyEvent<
     typeof schema
 > = async event => {
-    const name = event.body
-        ? event.body.name
-        : 'World';
+    const name = event.body ? event.body.name : 'World';
     const randomNumber = generateRandomNumber();
     return formatJSONResponse({
         message: `Bye ${name}. Your random number: ${randomNumber}!`,
-        randomNumber
+        randomNumber,
     });
 };
 
